@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<!DOCTYPE service_bundle SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
+
+<service_bundle type='manifest' name='export'>
+  
+  <service name='network/redis' type='service' version='0'>
+    
+    <create_default_instance enabled='true'/>
+    <single_instance/>
+    
+    <dependency name='fs' grouping='require_all' restart_on='none' type='service'>
+      <service_fmri value='svc:/system/filesystem/local'/>
+    </dependency>
+    
+    <dependency name='networking' grouping='require_all' restart_on='none' type='service'>
+      <service_fmri value='svc:/milestone/network:default'/>
+    </dependency>
+    
+    <exec_method name='start' type='method' exec='/opt/rails/redis/bin/redis-server /opt/rails/redis/conf/redis-daemon.conf' timeout_seconds='60'>
+      <method_context working_directory='/opt/rails/redis/data'>
+        <method_credential user='rails' group='other'/>
+        <method_environment>
+          <envvar name='PATH' value='/opt/local/sbin:/sbin:/usr/sbin:/usr/bin:/bin:/opt/local/bin' />
+          <envvar name='LD_LIBRARY_PATH' value='/opt/local/lib' />
+        </method_environment>
+      </method_context>
+    </exec_method>
+    
+    <exec_method name='stop' type='method' exec=':term' timeout_seconds='60'>
+      <method_context/>
+    </exec_method>
+    
+  </service>
+  
+</service_bundle>
