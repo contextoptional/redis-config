@@ -1,3 +1,42 @@
-#!/bin/sh
+#!/bin/bash
 
-gmake CC=gcc
+die() {
+  echo "$@" 1>&2
+  exit 1
+}
+
+VERSION=2.0.4
+TMPDIR="$(mktemp -d)"
+INSTALL=/opt/rails/redis
+ASUSER=rails
+ASGROUP=other
+trap "rm -rf ${TMPDIR}" "EXIT"
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --help)     die "compile [ --version 2.0.4 ] [ --install DIR ] [ --user USER ] [ --group GROUP ]";;
+    --version)  VERSION="$2"; shift;;
+    --install)  INSTALL="$2"; shift;;
+    --user)     ASUSER="$2"; shift;;
+    --group)    ASGROUP="$2"; shift;;
+    *)          die "Unknown parameter $1";;
+  esac
+  shift
+done
+
+install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}"
+install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/bin"
+install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/conf"
+install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/data"
+
+(
+  cd "${TMPDIR}"
+  wget "http://redis.googlecode.com/files/redis-${VERSION}.tar.gz"
+  tar zxf "redis-${VERSION}.tar.gz"
+  cd "redis-${VERSION}"
+  gmake CC=gcc
+  for f in benchmark check-aof check-dump cli server
+  do
+    install -m 0755 -u $ASUSER -g $ASGROUP -s -f "${INSTALL}/bin" "redis-$f" 
+  done
+)
