@@ -5,3 +5,8 @@ Redis smf and conf files for Solaris. Also a script to download, compile and ins
 sudo svccfg import redis.smf 
 sudo svcadm enable redis
 svcs redis
+
+If you are using redis you probably care about:
+https://github.com/ezmobius/redis-rb
+https://github.com/defunkt/redis-namespace
+https://github.com/defunkt/resque
