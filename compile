@@ -28,6 +28,8 @@ install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}"
 install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/bin"
 install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/conf"
 install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/data"
+install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/logs"
+install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/run"
 
 (
   cd "${TMPDIR}"
@@ -40,3 +42,5 @@ install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/data"
     install -m 0755 -u $ASUSER -g $ASGROUP -s -f "${INSTALL}/bin" "redis-$f" 
   done
 )
+
+install -m 0644 -u $ASUSER -g $ASGROUP -s -f "${INSTALL}/conf" "redis.conf" 
