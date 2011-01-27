@@ -1,1 +1,7 @@
 Compile script and config for redis
+
+./compile
+
+sudo svccfg import redis.smf 
+sudo svcadm enable redis
+svcs redis
