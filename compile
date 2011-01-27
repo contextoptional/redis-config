@@ -14,7 +14,7 @@ trap "rm -rf ${TMPDIR}" "EXIT"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --help)     die "compile [ --version 2.0.4 ] [ --install DIR ] [ --user USER ] [ --group GROUP ]";;
+    --help)     die "$0 [ --version ${VERSION} ] [ --install ${INSTALL} ] [ --user ${ASUSER} ] [ --group ${ASGROUP} ]";;
     --version)  VERSION="$2"; shift;;
     --install)  INSTALL="$2"; shift;;
     --user)     ASUSER="$2"; shift;;
