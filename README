@@ -1,4 +1,4 @@
-Compile script and config for redis
+Redis smf and conf files for Solaris. Also a script to download, compile and install it.
 
 ./compile
 
