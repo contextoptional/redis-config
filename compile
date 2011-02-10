@@ -16,6 +16,7 @@ while [ "$#" -gt 0 ]; do
   case "$1" in
     --help)     die "$0 [ --version ${VERSION} ] [ --install ${INSTALL} ] [ --user ${ASUSER} ] [ --group ${ASGROUP} ]";;
     --version)  VERSION="$2"; shift;;
+    --version22) VERSION="2.2.0-rc4";;
     --install)  INSTALL="$2"; shift;;
     --user)     ASUSER="$2"; shift;;
     --group)    ASGROUP="$2"; shift;;
