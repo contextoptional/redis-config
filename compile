@@ -6,24 +6,29 @@ die() {
 }
 
 VERSION=2.0.4
-TMPDIR="$(mktemp -d)"
 INSTALL=/opt/rails/redis
 ASUSER=rails
 ASGROUP=other
-trap "rm -rf ${TMPDIR}" "EXIT"
+AUTOCLEAN=true
+BUILD=.
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --help)     die "$0 [ --version ${VERSION} ] [ --install ${INSTALL} ] [ --user ${ASUSER} ] [ --group ${ASGROUP} ]";;
     --version)  VERSION="$2"; shift;;
-    --version22) VERSION="2.2.0-rc4";;
+    --22)       BUILD="src"
+                VERSION="2.2.0-rc4";;
     --install)  INSTALL="$2"; shift;;
     --user)     ASUSER="$2"; shift;;
     --group)    ASGROUP="$2"; shift;;
+    --noclean)  AUTOCLEAN=false;;
     *)          die "Unknown parameter $1";;
   esac
   shift
 done
+
+TMPDIR="$(mktemp -d)"
+$AUTOCLEAN && trap "rm -rf ${TMPDIR}" "EXIT"
 
 install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}"
 install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/bin"
@@ -40,7 +45,7 @@ install -d -m 0755 -u $ASUSER -g $ASGROUP "${INSTALL}/run"
   gmake CC=gcc
   for f in benchmark check-aof check-dump cli server
   do
-    install -m 0755 -u $ASUSER -g $ASGROUP -s -f "${INSTALL}/bin" "redis-$f" 
+    install -m 0755 -u $ASUSER -g $ASGROUP -s -f "${INSTALL}/bin" "${BUILD}/redis-$f" 
   done
 )
 
